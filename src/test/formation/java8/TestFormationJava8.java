@@ -10,6 +10,8 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -24,23 +26,85 @@ public class TestFormationJava8 {
      * @param args the command line arguments
      */
     public static void main(String[] args) throws IOException{
-        Path path = Paths.get("/", "Volumes", "Dev", "projets", "formations", "test-formation-java8", "cars.csv");
+//        Path path = Paths.get("/", "Volumes", "Dev", "projets", "formations", "test-formation-java8", "cars.csv");
+//        
+//         Files
+//                .lines(path)
+//                .skip(2)
+////                .limit(100)
+//                .map(Car::of)
+////                .peek(System.out::println)
+//                .collect(Collectors.groupingBy(Car::getCar))
+//                .entrySet()
+//                .stream()
+//                .max(comparator);
+
+
+        List<Personne> personnes = Arrays
+                .asList(Personne.of("Diallo", "Amadou", 18), 
+                        Personne.of("Traore", "Sidiki", 35), 
+                        Personne.of("Kourouma", "Almamy", 12));
+        Collections.sort(personnes);
+        System.out.println(personnes);
+        Collections.sort(personnes, (p1, p2) -> p1.getAge().compareTo(p2.getAge()));
+        System.out.println(personnes);
+        Collections.sort(personnes, Comparator.comparing(Personne::getAge));
+        System.out.println(personnes);
+        Collections.sort(personnes, (p1, p2) -> p1.getNom().compareTo(p2.getNom()));
+        System.out.println(personnes);
         
-         Files
-                .lines(path)
-                .skip(2)
-//                .limit(100)
-                .map(Car::of)
-//                .peek(System.out::println)
-                .collect(Collectors.groupingBy(Car::getCar))
-                .entrySet()
-                .stream()
-                .filter(entry -> entry.getValue().size() > 3)
-                .forEach(entry -> System.out.println(entry.getKey() + " = " + entry.getValue().size()));
-        
-//        System.out.println(nb);
     }
 
+    
+    
+    private static class Personne implements Comparable<Personne>{
+        private String nom, prenom;
+        private Integer age;
+
+        public static Personne of(String nom, String prenom, Integer age) {
+            return new Personne(nom, prenom, age);
+        }
+        public Personne(String nom, String prenom, int age) {
+            this.nom = nom;
+            this.prenom = prenom;
+            this.age = age;
+        }
+
+        public String getNom() {
+            return nom;
+        }
+
+        public String getPrenom() {
+            return prenom;
+        }
+
+        public Integer getAge() {
+            return age;
+        }
+
+        @Override
+        public String toString() {
+            return "Personne{" + "nom=" + nom + ", prenom=" + prenom + ", age=" + age + '}';
+        }
+
+        @Override
+        public int compareTo(Personne o) {
+            int result = this.age.compareTo(o.age);
+            if(result != 0) {
+                return result;
+            }
+            
+            result = this.nom.compareTo(o.nom);
+            if(result != 0) {
+                return result;
+            }
+            
+            return this.prenom.compareTo(o.prenom);
+        }
+        
+        
+    }
+    
     private static class Car {
 
         String car;
