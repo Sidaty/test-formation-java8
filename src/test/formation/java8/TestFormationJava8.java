@@ -8,13 +8,14 @@ package test.formation.java8;
 import java.time.Duration;
 import java.time.Instant;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.Month;
 import java.time.Period;
-import java.time.temporal.ChronoUnit;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.GregorianCalendar;
 import java.util.List;
 
 /**
@@ -27,6 +28,21 @@ public class TestFormationJava8 {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
+        ZoneId.getAvailableZoneIds()
+                .stream()
+                .filter(s -> s.contains("Tim"))
+                .forEach(System.out::println);
+        System.out.println("count : " + ZoneId.getAvailableZoneIds().stream().count());
+        
+        ZoneId zone = ZoneId.of("Europe/Athens");
+        
+        ZonedDateTime zonedDateTime = ZonedDateTime.now();
+        System.out.println("zone : " + zonedDateTime.getZone().getId());
+        LocalDateTime localDateTime = LocalDateTime.now();
+        System.out.println("localDateTime : " + localDateTime);
+    }
+
+    private static void test03() {
         LocalDate now = LocalDate.now();
         LocalDate localDate = LocalDate.of(2000, Month.MARCH, 3);
         System.out.println(localDate);
