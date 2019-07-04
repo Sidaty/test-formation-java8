@@ -30,19 +30,15 @@ public class TestFormationJava8 {
     public static void main(String[] args) {
         List<String> noms = Arrays.asList("Toto78", "Tata", "Titi travaille");
 
-        Verificateur verificateur = new Verificateur();
-        Afficheur<String> afficheurS = new Afficheur();
-        Afficheur<Integer> afficheurI = new Afficheur();
-
         int tailleTotale = 0;
 
         long nb = noms
                 .stream()
-                .peek(afficheurS)
-                .map(t -> t.length())
-                .peek(afficheurI)
-                .filter(verificateur)
-                .peek(afficheurI)
+                .peek(nom -> System.out.println(nom))
+                .map(nom -> nom.length())
+                .peek(taille -> System.out.println(taille))
+                .filter(taile -> taile > 4)
+                .peek(taille -> System.out.println(taille))
                 .count();
 
         System.out.println("Count : " + nb);
@@ -53,24 +49,6 @@ public class TestFormationJava8 {
 //        }
 
         System.out.println("tailleTotale : " + tailleTotale);
-    }
-
-    private static class Verificateur implements Predicate<Integer> {
-
-        @Override
-        public boolean test(Integer t) {
-            return t > 4;
-        }
-
-    }
-
-    private static class Afficheur<C> implements Consumer<C> {
-
-        @Override
-        public void accept(C c) {
-            System.out.println(c);
-        }
-
     }
 
 }
