@@ -12,6 +12,7 @@ import java.nio.file.Paths;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.function.BiFunction;
 import java.util.stream.Collectors;
 
 /**
@@ -23,24 +24,17 @@ public class TestFormationJava8 {
     /**
      * @param args the command line arguments
      */
-    public static void main(String[] args) throws IOException{
+    public static void main(String[] args) throws IOException {
         Path path = Paths.get("/", "Volumes", "Dev", "projets", "formations", "test-formation-java8", "cars.csv");
-        
-         Optional<Map.Entry<String, List<Car>>> op = Files
-                .lines(path)
-                .skip(2)
-//                .limit(100)
-                .map(Car::of)
-//                .peek(System.out::println)
-                .collect(Collectors.groupingBy(Car::getCar))
-                .entrySet()
-                .stream()
-                .max((e1, e2) -> Integer.valueOf(e1.getValue().size()).compareTo(e2.getValue().size()));
 
-         op.map(e -> e.getValue().size() + " - " + e).ifPresent(System.out::println);
+        Files.lines(path).skip(2).limit(200).map(Car::of).peek(System.out::println).collect(Collectors.groupingBy(Car::getCar)).entrySet()
+                .stream()
+                .filter(e -> e.getValue().size() > 3)
+                .max((e1, e2) -> Integer.valueOf(e1.getValue().size()).compareTo(e2.getValue().size()))
+                .map(e -> e.getValue().size() + " - " + e)
+                .ifPresent(System.out::println);
     }
 
-    
     private static class Car {
 
         String car;
@@ -91,14 +85,12 @@ public class TestFormationJava8 {
         public String getOrigin() {
             return origin;
         }
-        
-        
-        
+
         public static Car of(String info) {
             Car car = new Car();
-            
+
             String[] infos = info.split(";");
-            
+
             car.car = infos[0];
             car.mpg = Double.valueOf(infos[1]);
             car.cylinders = Integer.valueOf(infos[2]);
@@ -108,7 +100,7 @@ public class TestFormationJava8 {
             car.acceleration = Double.valueOf(infos[6]);
             car.model = Integer.valueOf(infos[7]);
             car.origin = infos[8];
-            
+
             return car;
         }
 
@@ -116,7 +108,6 @@ public class TestFormationJava8 {
         public String toString() {
             return "Car{" + "car=" + car + ", mpg=" + mpg + ", cylinders=" + cylinders + ", displacement=" + displacement + ", horsepower=" + horsepower + ", weight=" + weight + ", acceleration=" + acceleration + ", model=" + model + ", origin=" + origin + '}';
         }
-
 
     }
 }
