@@ -29,53 +29,41 @@ public class TestFormationJava8 {
      */
     public static void main(String[] args) {
         List<String> noms = Arrays.asList("Toto78", "Tata", "Titi travaille");
-        
-        Transformateur transformateur = new Transformateur();
+
         Verificateur verificateur = new Verificateur();
         Afficheur<String> afficheurS = new Afficheur();
         Afficheur<Integer> afficheurI = new Afficheur();
-        
+
         int tailleTotale = 0;
-        
+
         long nb = noms
                 .stream()
                 .peek(afficheurS)
-                .map(transformateur)
+                .map(t -> t.length())
                 .peek(afficheurI)
                 .filter(verificateur)
                 .peek(afficheurI)
                 .count();
-        
+
         System.out.println("Count : " + nb);
 //        for (String nom : noms) {
 //            int taille = transformateur.transformer(nom);
 //            System.out.println("taille : " + taille);
 //            tailleTotale += taille;
 //        }
-        
+
         System.out.println("tailleTotale : " + tailleTotale);
     }
 
-    
-    
-    private static class Transformateur implements Function<String, Integer>{
-        
-        @Override
-        public Integer apply(String elt) {
-            return elt.length();
-        }
-        
-    }
-    
     private static class Verificateur implements Predicate<Integer> {
 
         @Override
         public boolean test(Integer t) {
             return t > 4;
         }
-        
+
     }
-    
+
     private static class Afficheur<C> implements Consumer<C> {
 
         @Override
@@ -83,8 +71,6 @@ public class TestFormationJava8 {
             System.out.println(c);
         }
 
-        
     }
-    
-    
+
 }
